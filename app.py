@@ -7,12 +7,14 @@ import urllib.parse as urlparse
 
 app = Flask(__name__)
 
-# Rate Limiter Configuration
+# Corrected Limiter Configuration
 limiter = Limiter(
-    app,
+    app=app,
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
 )
+
+# Rest of your Flask app code...
 
 @app.route('/query', methods=['POST'])
 @limiter.limit("10 per minute")  # Adjust rate limit as needed
