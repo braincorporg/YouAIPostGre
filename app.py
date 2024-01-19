@@ -38,7 +38,7 @@ def query_database():
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
         # Parameterized query
-        cursor.execute(db_info['query'], db_info.get('params', ()))
+        cursor.execute(db_info['query'])
 
         result = cursor.fetchall()
         cursor.close()
