@@ -14,8 +14,6 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"]
 )
 
-# Rest of your Flask app code...
-
 @app.route('/query', methods=['POST'])
 @limiter.limit("10 per minute")  # Adjust rate limit as needed
 def query_database():
