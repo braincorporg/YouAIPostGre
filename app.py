@@ -46,8 +46,5 @@ def query_database():
 
         return jsonify(result)
 
-    except Exception as e:
-        return jsonify({'error': str(e)})
-
 if __name__ == '__main__':
     app.run(debug=False)  # Set debug to False for production
