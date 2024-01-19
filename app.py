@@ -17,34 +17,34 @@ limiter = Limiter(
 @app.route('/query', methods=['POST'])
 @limiter.limit("10 per minute")  # Adjust rate limit as needed
 def query_database():
-    try:
-        db_info = request.json
-        url = urlparse.urlparse(db_info['database_url'])
 
-        dbname = url.path[1:]
-        user = url.username
-        password = url.password
-        host = url.hostname
-        port = url.port if url.port else '5432'
+    db_info = request.json
+    url = urlparse.urlparse(db_info['database_url'])
 
-        connection = psycopg2.connect(
-            dbname=dbname,
-            user=user,
-            password=password,
-            host=host,
-            port=port
-        )
+    dbname = url.path[1:]
+    user = url.username
+    password = url.password
+    host = url.hostname
+    port = url.port if url.port else '5432'
 
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    connection = psycopg2.connect(
+        dbname=dbname,
+        user=user,
+        password=password,
+        host=host,
+        port=port
+    )
 
-        # Parameterized query
-        cursor.execute(db_info['query'], db_info.get('params', ()))
+    cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        result = cursor.fetchall()
-        cursor.close()
-        connection.close()
+    # Parameterized query
+    cursor.execute(db_info['query'], db_info.get('params', ()))
 
-        return jsonify(result)
+    result = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=False)  # Set debug to False for production
